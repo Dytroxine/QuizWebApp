@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cryptomus Cube{% endblock %}</title>
+    <style>
+        /* Основной стиль */
+        .subtitle {
+            position: absolute;
+            top: 84px;
+            left: 16px;
+            width: 306px;
+            height: 66px;
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 32.78px;
+            letter-spacing: -0.02em; /* -2% */
+            color: #FFFFFF;
+        }
+        .footer {
+            position: fixed; /* Фиксируем футер */
+            max-width: 390px; /* Ограничиваем ширину футера */
+            width: 100%; /* Делаем ширину на 100% контейнера */
+            height: 134px; /* Высота футера */
+            bottom: -100px; /* Почти скрываем футер, оставляем видимым край */
+            left: 50%; /* Центруем футер */
+            transform: translateX(-50%); /* Сдвигаем его влево на половину ширины */
+            background-color: #141414; /* Цвет фона */
+            border-top-left-radius: 16px; /* Скругление верхнего левого угла */
+            border-top-right-radius: 16px; /* Скругление верхнего правого угла */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #FFFFFF; /* Цвет текста */
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            text-align: center;
+            transition: bottom 0.3s ease-in-out; /* Плавный переход */
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 115vh;
+            display: flex;
+            flex-direction: column; /* Вертикальная компоновка */
+            background-color: #000;
+            overflow-y: auto; /* Включаем вертикальную прокрутку для body */
+        }
+
+        .container {
+            flex: 1; /* Растягиваем контейнер, чтобы занять доступное пространство */
+            width: 390px; /* Ширина для мобильного экрана */
+            height: 100vh;
+            overflow-y: auto; /* Включаем вертикальную прокрутку */
+            position: relative;
+            margin: auto;
+            -ms-overflow-style: none; /* Для IE и Edge */
+            scrollbar-width: none; /* Для Firefox */
+        }
+
+        .layered-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .logo {
+            position: absolute;
+            top: 36px;
+            left: 16px;
+            width: 78px;
+            height: 16px;
+        }
+        .description {
+            position: absolute;
+            top: 174px;
+            left: 16px;
+            width: 288px;
+            height: 60px;
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 20.4px;
+            color: #FFFFFFE5; /* Полупрозрачный белый */
+        }
+        .bottom-block {
+            position: absolute;
+            width: 390px;
+            height: 432px;
+            top: 420px;
+            left: 0;
+            background-color: #0B0B0B;
+            border-radius: 16px;
+        }
+        .bottom-block-text {
+            position: absolute;
+            top: 25px;
+            left: 16px;
+            width: 232px;
+            height: 33px;
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 32.78px;
+            letter-spacing: -0.02em; /* -2% */
+            color: #FFFFFF;
+        }
+        .quiz-banner {
+            position: absolute;
+            top: 82px;
+            left: 16px;
+            width: 358px;
+            height: 192px;
+            border-radius: 16px;
+            object-fit: cover; /* Чтобы изображение корректно масштабировалось */
+        }
+        .quiz-title {
+            position: absolute;
+            top: 223px; /* Относительно верхней грани баннера */
+            left: 32px;
+            width: 283px;
+            height: 27px;
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 27.32px;
+            color: #FFFFFF; /* Белый текст */
+            overflow: hidden; /* На случай, если текст слишком длинный */
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .quiz-time-container {
+            position: absolute;
+            top: 117px; /* Расположение относительно баннера */
+            left: 32px;
+            display: flex;
+            align-items: center;
+            gap: 4px; /* Разрыв между иконкой и текстом */
+        }
+
+        .quiz-time-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .quiz-time-text {
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 16px;
+            color: #FFFFFF; /* Белый цвет текста */
+        }
+        .footer-title {
+            position: absolute;
+            top: 12px;
+            left: 24px;
+            width: 257px;
+            height: 22px;
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 21.86px;
+            color: #FFFFFF;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+        <img src="{% static 'main_page/images/logo.png' %}" alt="Cryptomus Logo" class="logo">
+        {% block content %}{% endblock %}
+    </div>
+    <div class="footer">
+        <p class="footer-title" style="white-space: nowrap;">Cryptomus на других площадках</p>
+        <div class="footer-block" style="position: absolute; top: 70px; left: 24px; width: 343px; height: 40px; display: flex; justify-content: space-between;">
+            <img src="{% static 'main_page/images/x.png' %}" alt="x">
+            <img src="{% static 'main_page/images/tg.png' %}" alt="tg">
+            <img src="{% static 'main_page/images/red.png' %}" alt="red">
+            <img src="{% static 'main_page/images/inst.png' %}" alt="inst">
+            <img src="{% static 'main_page/images/yt.png' %}" alt="yt">
+            <img src="{% static 'main_page/images/fk.png' %}" alt="fk">
+            <img src="{% static 'main_page/images/ds.png' %}" alt="ds">
+        </div>
+    </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const footer = document.querySelector('.footer');
+        const body = document.documentElement;
+
+        // Добавляем событие на прокрутку body
+        window.addEventListener('scroll', () => {
+            const scrollTop = body.scrollTop;
+
+            if (scrollTop + window.innerHeight >= body.scrollHeight) {
+                // Если прокрутили до конца, выдвигаем футер
+                footer.style.bottom = '0px';
+            } else {
+                // Если не в конце страницы, скрываем футер
+                footer.style.bottom = '-100px';
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

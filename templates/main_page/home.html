@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <img src="{% static 'main_page/images/cryptomus_3.png' %}" alt="Cryptomus 3" class="layered-image">
+    <img src="{% static 'main_page/images/cryptomus_4.png' %}" alt="Cryptomus 4" class="layered-image">
+    <img src="{% static 'main_page/images/cryptomus_5.png' %}" alt="Cryptomus 5" class="layered-image">
+    <img src="{% static 'main_page/images/cryptomus_1.png' %}" alt="Cryptomus 1" class="layered-image">
+    <img src="{% static 'main_page/images/cryptomus_2.png' %}" alt="Cryptomus 2" class="layered-image">
+
+    <div class="subtitle">
+        Welcome to the Cryptomus Cube ecosystem!
+    </div>
+    <div class="description">
+        Here you have fun and earn rewards at the same time. Take this incredible opportunity to collect<br>CRMS.
+    </div>
+
+    <div class="bottom-block">
+        <div class="bottom-block-text">
+            Take our test!
+        </div>
+        {% if quiz %}
+        <a href="{% url 'quiz:quiz_view' quiz.id %}">
+            <img src="{{ quiz.banner.url }}" alt="{{ quiz.title }}" class="quiz-banner">
+
+            <div class="quiz-time-container">
+                <img src="{% static 'main_page/images/vector.png' %}" alt="Timer Icon" class="quiz-time-icon">
+                <div class="quiz-time-text">
+                    {{ quiz.duration_in_minutes }} минут
+                </div>
+            </div>
+            <div class="quiz-title">
+                {{ quiz.title }}
+            </div>
+        </a>
+        {% endif %}
+    </div>
+{% endblock %}
