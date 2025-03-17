@@ -1,354 +1,719 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<style>
-    .top-block {
-        position: absolute;
-        top: 0; /* Положение в верхней части страницы */
-        left: 0;
-        height: 115vh;
-        width: 100%; /* Ширина всей страницы */
-        background-color: #0B0B0B;
-    }
-    .hidden {
-    display: none !important;
-}
+<link rel="stylesheet" href="{% static 'quiz/css/styles.css' %}">
 
-    .choice-button.selected::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border: 2px solid #7F7F7F; /* Цвет обводки */
-    border-radius: 16px; /* Радиус обводки */
-    pointer-events: none; /* Чтобы обводка не мешала кликам */
-    box-sizing: border-box; /* Учитываем обводку внутри */
-}
-@keyframes blink {
-    0% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-
-    .banner {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            width: 358px;
-            height: 192px;
-            border-radius: 16px;
-            object-fit: cover; /* Чтобы изображение корректно масштабировалось */
-            transition: top 0.5s ease-in-out; /* Плавный переход для смещения баннера */
-        }
-        .load-banner {
-            position: absolute;
-            top: 234px;
-            left: 113.5px;
-            width: 163px;
-            height: 78px;
-            object-fit: cover; /* Чтобы изображение корректно масштабировалось */
-            transition: opacity 0.5s ease-in-out; /* Плавный переход */
-            opacity: 1;
-        }
-        .title {
-            position: absolute;
-            top: 157px; /* Относительно верхней грани баннера */
-            left: 32px;
-            width: 283px;
-            height: 27px;
-            font-family: 'Vela Sans GX', sans-serif;
-            font-weight: 700;
-            font-size: 20px;
-            line-height: 27.32px;
-            color: #FFFFFF; /* Белый текст */
-            overflow: hidden; /* На случай, если текст слишком длинный */
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            transition: top 0.5s ease-in-out; /* Плавный переход для смещения текста */
-        }
-        .time-container {
-            position: absolute;
-            top: 40px; /* Расположение относительно баннера */
-            left: 32px;
-            display: flex;
-            align-items: center;
-            gap: 4px; /* Разрыв между иконкой и текстом */
-            transition: top 0.5s ease-in-out; /* Плавный переход для смещения контейнера времени */
-        }
-
-        .time-icon {
-            width: 16px;
-            height: 16px;
-        }
-
-        .time-text {
-
-            font-family: 'Vela Sans GX', sans-serif;
-            font-weight: 500;
-            font-size: 12px;
-            line-height: 16px;
-            color: #FFFFFF; /* Белый цвет текста */
-        }
-
-        .new-title {
-            position: absolute;
-            top: 32px; /* Положение ниже остальных элементов */
-            left: 32px;
-            width: 283px;
-            height: 27px;
-            font-family: 'Vela Sans GX', sans-serif;
-            font-weight: 700;
-            font-size: 20px;
-            line-height: 27.32px;
-            color: #FFFFFF; /* Белый текст */
-            opacity: 0; /* Скрыто изначально */
-            transition: opacity 0.5s ease-in-out; /* Плавный переход для появления */
-        }
-
-
-
-        .choices-container {
-            position: absolute;
-            top: 300px;
-            left: 32px;
-            width: calc(100% - 64px);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .choice-button {
-            position: relative;
-            background-color: #1C1C1C;
-            color: #FFFFFF;
-            font-family: 'Vela Sans GX', sans-serif;
-            font-weight: 500;
-            font-size: 16px;
-            padding: 16px;
-            border: none;
-            border-radius: 16px;
-            text-align: left;
-            cursor: pointer;
-        }
-
-        .submit-button {
-            background-color: #141414;
-            color: #FFFFFF;
-            font-family: 'Vela Sans GX', sans-serif;
-            font-weight: 700;
-            font-size: 16px;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 24px;
-            width: 100%;
-        }
-
-</style>
 
     <div class="top-block">
-    <img src="{{ quiz.banner.url }}" alt="{{ quiz.title }}" class="banner hidden" id="quiz-banner">
-    <div class="time-container hidden" id="time-container">
+
+    <img src="{{ quiz.banner.url }}" alt="{{ quiz.title }}" class="banner" id="quiz-banner">
+    <div class="time-container" id="time-container">
         <img src="{% static 'main_page/images/vector.png' %}" alt="Timer Icon" class="time-icon">
-        <div class="time-text" id="timer-text">00:00</div>
+        <div class="time-text" id="timer-text">{% if quiz.duration_in_minutes == 1 %}
+                        {{ quiz.duration_in_minutes }} минута
+                    {% elif quiz.duration_in_minutes < 5 %}
+                        {{ quiz.duration_in_minutes }} минуты
+                    {% else %}
+                        {{ quiz.duration_in_minutes }} минут
+                    {% endif %} </div>
     </div>
-    <div class="title hidden" id="quiz-title">Theme: {{ quiz.title }}</div>
-    <div class="new-title hidden" id="new-quiz-title">{{ quiz.questions.first.text }}</div>
+    <div class="title" id="quiz-title">Theme: {{ quiz.title }}</div>
+    <div class="new-title" id="new-quiz-title">{{ quiz.questions.first.text }}</div>
     <div class="choices-container hidden" id="choices-container">
         {% for choice in quiz.questions.first.choice.all %}
+        <img src="{% static 'quiz/images/Component 12.png'%}" class="choice-box-img" id="choice-box-img">
         <button type="button" class="choice-button">{{ choice.text }}</button>
         {% endfor %}
-        <button type="button" class="submit-button hidden" id="submit-button">Отправить</button>
+        <button type="button" class="submit-button hidden inactive" id="submit-button">Send</button>
     </div>
 </div>
 <div class="container" id="loading-container">
-    <img src="{% static 'quiz/images/Frame 17.png'%}" class="load-banner" id="load-banner">
+    <div class="load-banner" id="load-banner">
+        <img class="loading-img" src="{% static 'quiz/images/Frame 17.png'%}" >
+        <div class="loading-text" id="loading-text">{{ loadingTexts.0 }}</div>
+    </div>
 </div>
 
 
+
 <script>
-    window.addEventListener('load', () => {
-    const loadingContainer = document.getElementById('loading-container');
-    const loadBanner = document.getElementById('load-banner');
-    const quizBanner = document.getElementById('quiz-banner');
-    const quizTitle = document.getElementById('quiz-title');
-    const timeContainer = document.getElementById('time-container');
-    const newQuizTitle = document.getElementById('new-quiz-title');
-    const choicesContainer = document.getElementById('choices-container');
-    const submitButton = document.getElementById('submit-button');
-    const timerText = document.getElementById('timer-text');
-
-    // Переменные для управления вопросами
-    let currentQuestionIndex = 0;
-    const questions = [
-        {% for question in quiz.questions.all %}
-            {
-                text: "{{ question.text }}",
-                is_multiple_choice: {{ question.is_multiple_choice|yesno:"true,false" }},
-                choices: [
-                    {% for choice in question.choice.all %}
-                        "{{ choice.text }}",
-                    {% endfor %}
-                ],
-                timeLimit: {{ question.time_limit }}
-            },
-        {% endfor %}
-    ];
-
-    let timerInterval;  // Переменная для хранения таймера
-
-    // Функция обновления вопроса
-    function updateQuestion() {
-        if (currentQuestionIndex < questions.length) {
-            const currentQuestion = questions[currentQuestionIndex];
-            newQuizTitle.textContent = currentQuestion.text;
-
-            // Обновляем варианты ответов
-            choicesContainer.innerHTML = '';
-            currentQuestion.choices.forEach(choiceText => {
-                const choiceButton = document.createElement('button');
-                choiceButton.className = 'choice-button';
-                choiceButton.textContent = choiceText;
-
-                // Обработчик клика по варианту ответа
-                choiceButton.addEventListener('click', () => {
-                    if (currentQuestion.is_multiple_choice) {
-                        // Если множественный выбор, добавляем или удаляем класс
-                        choiceButton.classList.toggle('selected');
-                    } else {
-                        // Если одиночный выбор, снимаем класс с других и добавляем к текущему
-                        const allChoices = document.querySelectorAll('.choice-button');
-                        allChoices.forEach(button => button.classList.remove('selected'));
-                        choiceButton.classList.add('selected');
-                    }
-                });
-
-                choicesContainer.appendChild(choiceButton);
-            });
-            choicesContainer.appendChild(submitButton); // Добавляем кнопку "Отправить"
-
-            // Сбрасываем таймер с новым временем
-            let remainingTime = currentQuestion.timeLimit;
-            timerText.textContent = `${Math.floor(remainingTime / 60)} : ${remainingTime % 60 < 10 ? '0' : ''}${remainingTime % 60}`;
-            clearInterval(timerInterval); // Останавливаем предыдущий таймер
-            timerInterval = setInterval(() => {
-                if (remainingTime > 0) {
-                    remainingTime--;
-                    const minutes = Math.floor(remainingTime / 60);
-                    const seconds = remainingTime % 60;
-                    timerText.textContent = `${minutes} : ${seconds < 10 ? '0' : ''}${seconds}`;
-                } else {
-                    clearInterval(timerInterval); // Останавливаем таймер, если время вышло
-                    submitButton.click(); // Кликаем по кнопке "Отправить" после истечения времени
-                }
-            }, 1000);
-        } else {
-            // Все вопросы пройдены
-            newQuizTitle.textContent = 'Вы завершили квиз!';
-            choicesContainer.innerHTML = ''; // Очищаем варианты ответов
-        }
-    }
-
-    // Обработчик кнопки "Отправить"
-    submitButton.addEventListener('click', () => {
-        currentQuestionIndex++;
-        updateQuestion(); // Загружаем следующий вопрос
-    });
-
-    // Инициализация первого вопроса
-    if (loadingContainer && loadBanner) {
-
-        setTimeout(() => {
-            if (quizBanner) {
-                quizBanner.style.top = '82px';
+        window.addEventListener('load', () => {
+            // Получаем элементы DOM для управления отображением
+            const loadingContainer = document.getElementById('loading-container');
+            const loadBanner = document.getElementById('load-banner');
+            const boxImg = document.getElementById('choice-box-img');
+            const quizBanner = document.getElementById('quiz-banner');
+            const quizTitle = document.getElementById('quiz-title');
+            const timeContainer = document.getElementById('time-container');
+            const newQuizTitle = document.getElementById('new-quiz-title');
+            const choicesContainer = document.getElementById('choices-container');
+            const submitButton = document.getElementById('submit-button');
+            const timerText = document.getElementById('timer-text');
+            const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+            const socket = new WebSocket(`${protocol}${window.location.host}/ws/quiz/`);
+            const userPlace = {{ user_place|default:"null" }};
+            const promocode = "{{ promocode|default:'' }}";
+            const loadingTexts = {{ loadingTexts|safe }};
+            let currentTextIndex = 0;
+            const loadingTextElement = document.getElementById('loading-text');
+            function deactivateSubmitButton() {
+                submitButton.classList.add('inactive');
+                submitButton.disabled = true;
             }
-            if (quizTitle) {
-                quizTitle.style.top = '223px';
+            function updateLoadingText() {
+            currentTextIndex = (currentTextIndex + 1) % loadingTexts.length;
+            loadingTextElement.textContent = loadingTexts[currentTextIndex];
             }
-            if (timeContainer) {
-                timeContainer.style.top = '106px';
+            setInterval(updateLoadingText, 7000);
+            // Переменные для управления состоянием квиза
+            let currentQuestionIndex = {{ user_answers_count }}; // Индекс текущего вопроса
+            let userAnswers = JSON.parse(localStorage.getItem('userAnswers')) || [];
+
+            // Список вопросов, сгенерированный из Django-шаблона
+            const questions = [
+                {% for question in quiz.questions.all %}
+                    {
+                        id: "{{ question.id }}",
+                        text: "{{ question.text|escapejs }}",
+                        question_type: "{{ question.question_type }}",
+                        correct_answer: "{{ question.correct_answer }}",
+                        choices: [
+                            {% for choice in question.choice.all %}
+                                {
+                                    id: {{ choice.id }},
+                                    text: "{{ choice.text|escapejs }}",
+                                    is_correct: {{ choice.is_correct|yesno:"true,false" }}
+                                },
+                            {% endfor %}
+                        ],
+                        timeLimit: {{ question.time_limit }} // Ограничение времени на вопрос
+                    },
+                {% endfor %}
+            ];
+
+            let timerInterval; // Таймер для обратного отсчёта
+
+            // Функция для форматирования времени (мм:сс)
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
             }
-            if (newQuizTitle) {
-                setTimeout(() => {
-                    newQuizTitle.style.opacity = '1';
-                    updateQuestion(); // Инициализируем первый вопрос
-                }, 500);
+
+            // Функция для отображения текущего вопроса
+            function updateQuestion() {
+                if (currentQuestionIndex < questions.length) {
+    const currentQuestion = questions[currentQuestionIndex];
+    const questionId = currentQuestion.id; // Получаем ID текущего вопроса
+
+    // Устанавливаем текст вопроса
+    newQuizTitle.textContent = currentQuestion.text;
+
+    // Очищаем контейнер с вариантами ответов
+    choicesContainer.innerHTML = '';
+
+    if (currentQuestion.question_type === "text_input") {
+        // Если тип вопроса - ввод текста, создаем поле ввода
+        const textInput = document.createElement('input');
+        textInput.type = 'text';
+        textInput.className = 'text-input';
+        textInput.placeholder = 'type your answer...';
+
+        // Добавляем обработчик ввода для активации кнопки отправки
+        textInput.addEventListener('input', () => {
+            if (textInput.value.trim().length > 0) {
+                activateSubmitButton(); // Активируем кнопку
             }
-            if (choicesContainer) {
-                setTimeout(() => {
-                    choicesContainer.style.opacity = '1';
-                }, 1500);
-            }
-        }, 500);
-    }
-});
-</script>
- <script>
-        // Подключение WebSocket
-const quizId = window.location.pathname.split('/')[2];
-const socket = new WebSocket(`ws://${window.location.host}/ws/quiz/${quizId}/`);
-
-socket.onopen = function() {
-    console.log("✅ Соединение с WebSocket установлено");
-};
-
-socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    if (data.type === 'quiz_update') {
-        document.getElementById('question-text').textContent = data.question || "Вопросы завершены!";
-        startTimer(data.remaining_time);
-    }
-
-    if (data.type === 'quiz_end') {
-        alert(data.message);
-    }
-    if (data.type === "start_quiz") {
-        console.log(`📢 Квиз ${data.quiz_id} начат!`);
-
-        // Остановить мерцание и скрыть баннер
-        const loadBanner = document.getElementById('load-banner');
-        const loadingContainer = document.getElementById('loading-container');
-        if (loadBanner) {
-            loadBanner.style.animation = 'none'; // Останавливаем анимацию
-            loadBanner.style.opacity = '0'; // Прозрачность до 0
-        }
-        if (loadingContainer) {
-            setTimeout(() => {
-                loadingContainer.style.display = 'none'; // Полностью скрыть
-            }, 500); // Дождаться завершения анимации
-        }
-
-        // Показываем элементы квиза
-        const elementsToShow = [
-            document.getElementById('quiz-banner'),
-            document.getElementById('time-container'),
-            document.getElementById('quiz-title'),
-            document.getElementById('new-quiz-title'),
-            document.getElementById('choices-container'),
-            document.getElementById('submit-button')
-        ];
-
-        elementsToShow.forEach(element => {
-            if (element) element.classList.remove('hidden');
         });
 
-        // Инициализируем первый вопрос
-        updateQuestion();
+        choicesContainer.appendChild(textInput); // Добавляем поле ввода в контейнер
+    } else {
+        // Добавляем варианты ответов в контейнер
+        currentQuestion.choices.forEach(choice => {
+            const choiceButton = document.createElement('button');
+            choiceButton.className = 'choice-button';
+            choiceButton.textContent = choice.text;
+            choiceButton.setAttribute('data-choice-id', choice.id); // Устанавливаем data-choice-id
+
+            // Логика выбора ответа
+            choiceButton.addEventListener('click', (event) => {
+                if (currentQuestion.question_type == "multiple_choice") {
+                    // Множественный выбор: переключаем класс 'selected'
+                    choiceButton.classList.toggle('selected');
+                } else {
+                    // Одиночный выбор: сбрасываем выбор всех кнопок
+                    const allChoices = document.querySelectorAll('.choice-button');
+                    allChoices.forEach(button => button.classList.remove('selected'));
+                    choiceButton.classList.add('selected');
+                }
+                // Активируем кнопку отправки
+                activateSubmitButton();
+            });
+
+            choicesContainer.appendChild(choiceButton); // Добавляем кнопку в контейнер
+        });
     }
-};
+
+    // Добавляем кнопку "Send"
+    choicesContainer.appendChild(submitButton);
+
+    // Настройка таймера для текущего вопроса
+    const savedTime = localStorage.getItem('quiz_timer_' + currentQuestion.id);
+    let remainingTime = savedTime ? parseInt(savedTime) : currentQuestion.timeLimit;
+    remainingTime = Math.min(remainingTime, currentQuestion.timeLimit);
+    timerText.textContent = formatTime(remainingTime);
+    clearInterval(timerInterval); // Очищаем предыдущий таймер
+
+    // Запускаем новый таймер
+    timerInterval = setInterval(async () => {
+        if (remainingTime > 0) {
+            remainingTime--;
+            localStorage.setItem('quiz_timer_' + currentQuestion.id, remainingTime); // Сохраняем оставшееся время
+            timerText.textContent = formatTime(remainingTime);
+        } else {
+            clearInterval(timerInterval); // Останавливаем таймер при истечении времени
+            localStorage.removeItem('quiz_timer_' + currentQuestion.id); // Удаляем сохраненное время
+
+            // Собираем выбранные ответы
+            const selectedChoices = [];
+            const choiceButtons = document.querySelectorAll('.choice-button.selected');
+            choiceButtons.forEach(button => {
+                selectedChoices.push(parseInt(button.getAttribute('data-choice-id')));
+                userAnswers.push(parseInt(button.getAttribute('data-choice-id')));
+            });
+
+            // Проверяем, есть ли текстовый вопрос и берем его значение
+            const textInput = document.querySelector('.text-input');
+            let textAnswer = textInput ? textInput.value.trim() : '';
+            if (textInput) {
+                userAnswers[currentQuestion.id] = textAnswer;
+            }
+            // Получаем данные для отправки
+            const telegramId = {{ telegram_id }};
+
+            console.log("Таймер истёк, отправка ответов...");
+
+            try {
+                // Отправка текстового ответа (если есть)
+                if (textInput) {
+                    console.log(`Отправка текстового ответа: telegram_id=${telegramId}, text_answer=${textAnswer}`);
+                    if (!textAnswer){
+                        textAnswer = 'Пустой ответ';
+                    }
+                    await fetch('/quiz/submit_answer/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            telegram_id: telegramId,
+                            question_id: currentQuestion.id,
+                            text_answer: textAnswer
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log("Ответ сервера:", data))
+                    .catch(error => console.error("Ошибка при отправке текстового ответа:", error));
+                }
+
+                // Отправка выбранных вариантов ответа (если есть)
+                for (const choiceId of selectedChoices) {
+                    console.log(`Отправка выбранного ответа: telegram_id=${telegramId}, choice_id=${choiceId}`);
+
+                    await fetch('/quiz/submit_answer/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            telegram_id: telegramId,
+                            choice_id: choiceId
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log("Ответ сервера:", data))
+                    .catch(error => console.error("Ошибка при отправке выбранного ответа:", error));
+                }
+
+            } catch (error) {
+                console.error("Ошибка при отправке ответов:", error);
+            }
+
+            // Переход к следующему вопросу
+            currentQuestionIndex++;
+            updateQuestion();
+        }
+    }, 1000);
+} else {
+
+showIntermediateScreen(userPlace, promocode);
+}
+}
+function showIntermediateScreen(userPlace, promocode) {
+    timerText.textContent = '';
+    choicesContainer.innerHTML = '';
 
 
+    const mainContainer = document.querySelector('.container');
+    const topBlock = document.querySelector('.top-block');
+    const bgImage = document.createElement('img');
+
+    bgImage.src = "{% static 'quiz/images/BG.png' %}"; // Путь к картинке
+    bgImage.style.zIndex = 0;
+    bgImage.classList.add('layered-image'); // Добавляем класс для стилизации
+
+    // Добавляем изображение в контейнер
+    document.body.appendChild(bgImage);
+
+    // Скрываем ненужные элементы
+    document.querySelector('.banner')?.classList.add('hidden');
+    document.querySelector('.title')?.classList.add('hidden');
+    document.querySelector('.new-title')?.classList.add('hidden');
+    document.querySelector('.logo')?.classList.add('hidden');
+
+    // Делаем футер прозрачным вместо удаления
+    const footer = document.querySelector('.footer');
+    if (footer) {
+        footer.style.opacity = '0';
+        footer.style.transition = 'opacity 0.5s ease-in-out';
+    }
+
+    // Скрываем все элементы в `top-block`
+    Array.from(topBlock.children).forEach(child => {
+
+            child.style.display = 'none'; // Просто скрываем
+
+    });
+
+    // Контейнер для новых элементов
+    const container = document.createElement('div');
+    container.className = 'intermediate-container';
+
+    // Первый блок (Ваш результат, место, текст "место")
+    const resultContainer = document.createElement('div');
+    resultContainer.className = 'result-container';
+
+    const resultText = document.createElement('div');
+    resultText.textContent = 'Your result:';
+    resultText.className = 'result-text';
+
+    const logoContainer = document.createElement('div');
+    logoContainer.className = 'logo-container';
+
+    const logoImage = document.createElement('img');
+    logoImage.src = '/static/quiz/images/Logotype.png';
+    logoImage.alt = 'Logo';
+
+    logoContainer.appendChild(logoImage);
+    topBlock.appendChild(logoContainer);
+
+    const placeContainer = document.createElement('div');
+    placeContainer.className = 'place-container'; // Контейнер для места
+
+    const placeNumber = document.createElement('div');
+    placeNumber.textContent = userPlace;
+    placeNumber.className = 'place-number';
+
+    const placeText = document.createElement('div');
+    placeText.textContent = 'место';
+    placeText.className = 'place-text';
+
+    placeContainer.appendChild(placeNumber);
+    placeContainer.appendChild(placeText);
+    resultContainer.appendChild(resultText);
+    resultContainer.appendChild(placeContainer);
+    container.appendChild(resultContainer);
+
+    // Второй блок (Награда)
+    if (promocode) {
+        const rewardContainer = document.createElement('div');
+        rewardContainer.className = 'reward-container';
+
+        const rewardText = document.createElement('div');
+        rewardText.textContent = 'Your reward:';
+        rewardText.className = 'reward-text';
+
+        // Картинка награды
+        const rewardImage = document.createElement('img');
+        rewardImage.src = '/static/quiz/images/Group 4.png';
+        rewardImage.alt = 'Reward';
+        rewardImage.className = 'reward-image';
+
+        // Промокод
+        const promoCodeContainer = document.createElement('div');
+        promoCodeContainer.className = 'promo-code-container';
+        const copyButton = document.createElement('img');
+copyButton.src = '/static/quiz/images/Copy_btn.png';
+copyButton.alt = 'Copy';
+copyButton.className = 'copy-button';
+copyButton.addEventListener('click', async () => {
+    if (navigator.clipboard && window.isSecureContext) {
+        try {
+            await navigator.clipboard.writeText(promocode);
+            console.log('Промокод скопирован:', promocode);
+        } catch (err) {
+            console.error('Ошибка при копировании:', err);
+        }
+    } else {
+        const tempInput = document.createElement('input');
+        document.body.appendChild(tempInput);
+        tempInput.value = promocode;
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        console.log('Промокод скопирован (fallback):', promocode);
+    }
+});
+promoCodeContainer.appendChild(copyButton);
+
+        const promoCodeText = document.createElement('div');
+        promoCodeText.textContent = promocode;
+
+        promoCodeText.className = 'promo-code-text';
+
+        promoCodeContainer.appendChild(promoCodeText);
+        rewardContainer.appendChild(rewardText);
+        rewardContainer.appendChild(rewardImage);
+        rewardContainer.appendChild(promoCodeContainer);
+        container.appendChild(rewardContainer);
+    }
+
+    const resultButton = document.createElement('button');
+    resultButton.textContent = 'Check answers';
+    resultButton.className = 'mid-button';
+    resultButton.addEventListener('click', showResults);
+
+
+    // Создаем контейнер для кнопок
+const buttonContainer = document.createElement('div');
+buttonContainer.className = 'button-container';
+
+// Создаем кнопку "Home"
+const homeButton = document.createElement('button');
+homeButton.textContent = 'Home';
+homeButton.className = 'home-button';
+homeButton.addEventListener('click', () => {
+    window.location.href = '/{telegramId}'; // Измени URL, если главная страница отличается
+});
+
+// Добавляем кнопки в контейнер
+buttonContainer.appendChild(homeButton);
+buttonContainer.appendChild(resultButton);
+
+// Добавляем контейнер в основную область
+container.appendChild(buttonContainer);
+    container.style.zIndex = 1;
+    topBlock.appendChild(container);
+
+    timeContainer.style.display = 'none';
+}
+
+
+
+
+
+
+
+
+
+    function showResults() {
+    // Скрываем логотип и контейнер
+
+    const topBlock = document.querySelector('.top-block');
+    document.querySelector('.top-block').style.background = "none";
+
+    // Показываем скрытые старые элементы
+    document.querySelector('.banner')?.classList.remove('hidden');
+    document.querySelector('.title')?.classList.remove('hidden');
+    document.querySelector('.new-title')?.classList.remove('hidden');
+    document.querySelector('.logo-container')?.classList.add('hidden');
+    document.querySelector('.time-container')?.classList.add('hidden');
+    document.querySelectorAll('.banner, .title, .new-title, .footer, .footer-block, .logo-container, .intermediate-container')
+        .forEach(element => {
+            const currentZIndex = parseInt(window.getComputedStyle(element).zIndex) || 0;
+            element.style.zIndex = currentZIndex + 1;
+        });
+
+
+    // Показываем старые элементы в `top-block`
+    Array.from(topBlock.children).forEach(child => {
+        if (!child.classList.contains('intermediate-container')) {
+            child.style.display = ''; // Показываем обратно
+        }
+    });
+
+    // Удаляем созданный контейнер `intermediate-container`
+    document.querySelector('.intermediate-container')?.remove();
+
+
+    // Генерируем страницу с результатами
+    newQuizTitle.textContent = 'Results';
+    choicesContainer.innerHTML = '';
+
+    questions.forEach((question, index) => {
+        const questionElement = document.createElement('div');
+        questionElement.textContent = `${index + 1}. ${question.text}`;
+        questionElement.className = 'question-title';
+        choicesContainer.appendChild(questionElement);
+
+        if (question.question_type === "text_input") {
+    const userAnswerElement = document.createElement('div');
+    userAnswerElement.textContent = `${userAnswers[question.id] || "Empty answer"}`;
+    userAnswerElement.className = 'choice-button';
+    userAnswerElement.style.marginBottom = '8px';
+    userAnswerElement.style.cursor = 'default';
+
+    if (question.correct_answer) {
+        if (userAnswers[question.id]?.trim().toLowerCase() === question.correct_answer.trim().toLowerCase()) {
+            userAnswerElement.style.border = '2px solid #97FF72'; // Зеленая рамка для правильного ответа
+        } else {
+            userAnswerElement.style.border = '2px solid #FF5C5C'; // Красная рамка для неправильного ответа
+
+            // Добавляем правильный ответ маленьким серым текстом
+            const correctAnswerElement = document.createElement('div');
+            correctAnswerElement.textContent = `Correct answer: ${question.correct_answer}`;
+            correctAnswerElement.style.fontSize = '12px';
+            correctAnswerElement.style.color = '#B0B0B0';
+            correctAnswerElement.style.marginTop = '4px';
+
+            userAnswerElement.appendChild(correctAnswerElement);
+        }
+    }
+
+
+
+
+            choicesContainer.appendChild(userAnswerElement);
+        }
+        else
+            {
+                    question.choices.forEach(choice => {
+                        const choiceElement = document.createElement('div');
+                        const textElement = document.createElement('div');
+                        textElement.textContent = choice.text;
+                        choiceElement.className = 'choice-button';
+                        choiceElement.style.marginBottom = '8px';
+                        choiceElement.style.cursor = 'default';
+
+                        const Indicator = document.createElement('div');
+                        Indicator.className = 'indicator';
+                        Indicator.textContent = '✓';
+                        Indicator.style.color = '#141414';
+                        Indicator.style.marginRight = '18px';
+                        Indicator.style.border = '2px solid #414141';
+                        Indicator.style.backgroundColor = '#414141';
+                        Indicator.style.fontSize = '30px'; // Увеличиваем размер галочки
+                        Indicator.style.display = 'flex'; // Используем flexbox
+                        Indicator.style.alignItems = 'center'; // Выравниваем по центру вертикально
+                        Indicator.style.justifyContent = 'center';
+                        Indicator.style.fontWeight = 'bold';
+
+                        if (userAnswers.includes(choice.id))
+                            {
+                                if (choice.is_correct)
+                                    {
+                                        choiceElement.style.border = '2px solid #97FF72'
+                                        Indicator.style.border = '2px solid #97FF72';
+                                        Indicator.style.backgroundColor = '#97FF72';
+                                        choiceElement.appendChild(Indicator);
+                                    }
+                                else
+                                    {
+                                        Indicator.textContent = 'x';
+                                        choiceElement.style.border = '2px solid #FF5C5C'
+                                        Indicator.style.border = '2px solid #FF5C5C';
+                                        Indicator.style.backgroundColor = '#FF5C5C';
+                                        choiceElement.appendChild(Indicator);
+                                    }
+                            }
+                        else
+                            {
+                                if (choice.is_correct)
+                                    {
+                                        choiceElement.style.border = '2px solid #6f6f6f';
+                                        Indicator.style.border = '2px solid #6f6f6f';
+                                        Indicator.style.backgroundColor = '#6f6f6f';
+                                        choiceElement.appendChild(Indicator);
+                                    }
+                            }
+                        choiceElement.style.display = 'flex';
+                        choiceElement.style.flexDirection = 'row';
+                        choiceElement.style.alignItems = 'center';
+                        choiceElement.style.justifyContent = 'left';
+                        choiceElement.appendChild(textElement);
+                        choicesContainer.appendChild(choiceElement);
+
+                    });
+            }
+
+        const separator = document.createElement('hr');
+        separator.style.border = '1px solid #333333';
+        separator.style.margin = '16px 0';
+        choicesContainer.appendChild(separator);
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            submitButton.addEventListener('click', async () => {
+                deactivateSubmitButton();
+
+                submitButton.textContent = "Send";
+
+                // Собираем данные выбранных ответов
+                const selectedChoices = [];
+                const choiceButtons = document.querySelectorAll('.choice-button.selected');
+                choiceButtons.forEach(button => {
+                    selectedChoices.push(parseInt(button.getAttribute('data-choice-id')));
+                });
+                const textInput = document.querySelector('.text-input');
+                const textAnswer = textInput ? textInput.value.trim() : '';
+                // Проверяем, есть ли выбранные ответы
+                if (selectedChoices.length === 0 && textAnswer.length === 0) {
+                    activateSubmitButton();
+                    return;
+                }
+
+            });
+
+            // Функция активации кнопки после выбора ответа
+            function activateSubmitButton() {
+                submitButton.classList.remove('inactive');
+                submitButton.disabled = false;
+                submitButton.textContent = "Send";
+            }
+
+            // Функция для эффекта мерцания элемента
+            function addBlinkingEffect(element) {
+                setInterval(() => {
+                    element.style.opacity = element.style.opacity === '1' ? '0.5' : '1';
+                }, 500); // Меняем прозрачность каждые 500 мс
+            }
+
+            // Добавляем эффект мерцания для loadBanner
+            addBlinkingEffect(loadBanner);
+            {% if quiz.duration_in_minutes == 1 %}
+                timerText.textContent = '{{ quiz.duration_in_minutes }} минута';
+            {% elif quiz.duration_in_minutes < 5 %}
+                timerText.textContent = '{{ quiz.duration_in_minutes }} минуты';
+            {% else %}
+                timerText.textContent = '{{ quiz.duration_in_minutes }} минут';
+            {% endif %}
+
+            // Начальная инициализация (анимация и первый вопрос)
+            if ({{ quiz.is_active|yesno:"true,false" }} === true) {
+                setTimeout(() => {
+                    if (loadBanner) {
+                        loadBanner.style.animation = 'none'; // Останавливаем анимацию
+                        loadBanner.style.opacity = '0'; // Прозрачность до 0
+                    }
+                    if (loadingContainer) {
+                        setTimeout(() => {
+                            loadingContainer.style.display = 'none'; // Полностью скрыть
+                        }, 500); // Дождаться завершения анимации
+                    }
+                    if (quizBanner) quizBanner.style.top = '82px';
+                    if (quizTitle) quizTitle.style.top = '223px';
+                    if (timeContainer) timeContainer.style.top = '106px';
+
+                    if (newQuizTitle) {
+                        setTimeout(() => {
+                            newQuizTitle.style.opacity = '1';
+                            updateQuestion(); // Загружаем первый вопрос
+                        }, 500);
+                    }
+
+                    if (choicesContainer) {
+                        setTimeout(() => {
+                            choicesContainer.style.opacity = '1';
+                        }, 1500);
+                    }
+                }, 500);
+                // Показываем элементы квиза
+                    const elementsToShow = [
+                        document.getElementById('choices-container'),
+                        document.getElementById('submit-button'),
+                        document.getElementById('choice-box-img')
+                    ];
+
+                    elementsToShow.forEach(element => {
+                        if (element) element.classList.remove('hidden');
+                    });
+            }
+
+            // Обработчики WebSocket
+            socket.onopen = function() {
+                console.log("✅ Соединение с WebSocket установлено");
+            };
+
+            socket.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                if (data.type === 'quiz_update') {
+                    // Обработка обновлений квиза
+                }
+
+                if (data.type === 'quiz_end') {
+                    // Обработка завершения квиза
+                }
+                if (data.type === "start_quiz") {
+                    console.log(`📢 Квиз начат!`);
+
+                    // Остановить мерцание и скрыть баннер
+                    if (loadBanner) {
+                        loadBanner.style.animation = 'none'; // Останавливаем анимацию
+                        loadBanner.style.opacity = '0'; // Прозрачность до 0
+                    }
+                    if (loadingContainer) {
+                        setTimeout(() => {
+                            loadingContainer.style.display = 'none'; // Полностью скрыть
+                        }, 500); // Дождаться завершения анимации
+                    }
+                    if (quizBanner) quizBanner.style.top = '82px';
+                    if (quizTitle) quizTitle.style.top = '223px';
+                    if (timeContainer) timeContainer.style.top = '106px';
+                    if (newQuizTitle) {
+                        setTimeout(() => {
+                            newQuizTitle.style.opacity = '1';
+                            updateQuestion(); // Загружаем первый вопрос
+                        }, 500);
+                    }
+
+                    if (choicesContainer) {
+                        setTimeout(() => {
+                            choicesContainer.style.opacity = '1';
+                        }, 1500);
+                    }
+
+                    // Показываем элементы квиза
+                    const elementsToShow = [
+                        document.getElementById('choices-container'),
+                        document.getElementById('submit-button')
+                    ];
+
+                    elementsToShow.forEach(element => {
+                        if (element) element.classList.remove('hidden');
+                    });
+
+                    // Инициализируем первый вопрос
+                    updateQuestion();
+                }
+            }
+
+            // Добавьте здесь дополнительные обработчики событий WebSocket, если необходимо
+        });
     </script>
+
+
 
 {% endblock %}

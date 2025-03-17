@@ -1,0 +1,457 @@
+.logo-container {
+    position: absolute;
+    top: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 111.55px;
+    height: 23.73px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.indicator {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+}
+
+.copy-button {
+    width: 36.25px;
+    height: 37px;
+    cursor: pointer;
+    margin-right: 0;
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 16px; /* Расстояние между кнопками */
+    margin-top: 20px;
+}
+
+.home-button, .mid-button {
+    background-color: #444;
+    color: #fff;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    text-align: center;
+    min-width: 150px;
+}
+
+.home-button:hover, .mid-button:hover {
+    background-color: #666;
+}
+
+
+.logo-container img {
+    width: 100%;
+    height: auto;
+}
+
+.intermediate-container {
+    max-width: 338px;
+    min-height: 496px;
+    position: absolute;
+    top: 119px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 60px;
+}
+
+/* Первый блок */
+.result-container {
+    width: 126px;
+    min-height: 148px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+
+.result-text {
+    font-family: 'SF Pro Display', sans-serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 35.8px;
+    letter-spacing: -2%;
+    text-align: center;
+    color: white;
+}
+
+.place-number {
+    font-family: 'SF Pro Display', sans-serif;
+    font-weight: 600;
+    font-size: 70px;
+    line-height: 83.54px;
+    letter-spacing: -2%;
+    text-align: center;
+    color: white;
+}
+
+.place-text {
+    font-family: 'SF Pro Display', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21.48px;
+    letter-spacing: -2%;
+    text-align: center;
+    color: white;
+}
+
+/* Второй блок */
+.reward-container {
+    width: 338px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.reward-text {
+    font-family: 'SF Pro Display', sans-serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 35.8px;
+    letter-spacing: -2%;
+    text-align: center;
+    color: white;
+}
+
+.reward-image {
+    width: 143px;
+    height: 143px;
+    object-fit: contain;
+}
+
+.promo-code-container {
+    width: calc(100% - 32px);
+    max-width: 302px;
+    min-height: 61px;
+    background-color: #2B2C30;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding-left: 50px; /* Чтобы текст не наезжал на картинку */
+}
+
+.promo-code-text {
+    font-family: 'SF Pro Display', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21.48px;
+    letter-spacing: -2%;
+    text-align: center;
+    color: white;
+}
+
+
+
+
+
+
+
+
+/* "Ваша награда:" */
+.reward-text {
+    width: 338px;
+    height: 36px;
+    font-family: 'SF Pro Display', sans-serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 35.8px;
+    letter-spacing: -2%;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+
+
+
+
+.text-input {
+            position: relative;
+            max-width: 358px;
+            width: calc(100% - 32px);
+            margin-left: 16px;
+            margin-right: 16px;
+            height: 32px;
+            background-color: #343434;
+            color: #FFFFFF;
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            padding-top: 16px;
+            padding-bottom: 16px;
+            border: none;
+            border-radius: 16px;
+            text-align: left;
+            z-index: 1;
+        }
+
+.text-input::placeholder {
+    color: rgba(255, 255, 255, 0.6); /* Цвет плейсхолдера */
+}
+
+    .top-block {
+    max-width: 100vw;
+        position: absolute;
+        top: 0; /* Положение в верхней части страницы */
+        left: 0;
+        padding: 0;
+        margin: 0;
+        width: 100%; /* Ширина всей страницы */
+        background-color: #0B0B0B;
+        height: 100%;
+        background: inherit;
+        object-fit: cover;
+        display: flex;
+        flex-direction: column; /* Располагаем элементы вертикально */
+        align-items: center; /* Центрируем горизонтально */
+        justify-content: center;
+    }
+
+    .hidden {
+    display: none !important;
+}
+
+    .choice-button.selected::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #7F7F7F; /* Цвет обводки */
+    border-radius: 16px; /* Радиус обводки */
+    pointer-events: none; /* Чтобы обводка не мешала кликам */
+    box-sizing: border-box; /* Учитываем обводку внутри */
+    z-index: 1;
+}
+.mid-button.selected::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #7F7F7F; /* Цвет обводки */
+    border-radius: 16px; /* Радиус обводки */
+    pointer-events: none; /* Чтобы обводка не мешала кликам */
+    box-sizing: border-box; /* Учитываем обводку внутри */
+    z-index: 1;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+    .banner {
+    width: calc(100% - 32px); /* Картинка будет занимать всю ширину экрана */
+    max-width: 358px; /* Но не будет превышать 358px по ширине */
+    height: auto; /* Высота будет сохраняться пропорционально */
+    max-height: 192px; /* Максимальная высота 192px */
+    border-radius: 16px;
+    object-fit: cover; /* Чтобы изображение корректно масштабировалось */
+    transition: top 0.5s ease-in-out; /* Плавный переход для изменения масштаба */
+    z-index: 1;
+    margin-left: auto;
+    margin-right: auto; /* Центрируем картинку */
+    position: absolute;
+    top: 16px;
+}
+        .load-banner {
+            position: absolute;
+            top: 234px;
+            left: calc(50% - 81px);
+            width: 163px;
+            height: 78px;
+            object-fit: cover; /* Чтобы изображение корректно масштабировалось */
+            transition: opacity 0.5s ease-in-out; /* Плавный переход */
+            opacity: 1;
+        }
+        .loading-img {
+            padding-left: 57px;
+            width: 48px;
+            height: 48px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+        }
+        .loading-text {
+            font-family: 'Vela Sans GX', sans-serif;
+            text-align: center;
+            font-size: 16px; /* Размер шрифта */
+            line-height: 21.86px; /* Высота строки */
+            letter-spacing: 0%; /* Отсутствие межбуквенного интервала */
+            color: #FFFFFF; /* Белый цвет текста */
+        }
+
+        .title {
+            position: absolute;
+            top: clamp(80px, 15vw, 137px); /* Относительно верхней грани баннера */
+            left: calc(50% - 150px);
+            width: 283px;
+            height: 27px;
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 27.32px;
+            color: #FFFFFF; /* Белый текст */
+            overflow: hidden; /* На случай, если текст слишком длинный */
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            transition: top 0.5s ease-in-out; /* Плавный переход для смещения текста */
+            z-index: 1;
+        }
+        .time-container {
+            position: absolute;
+            top: 40px; /* Расположение относительно баннера */
+            left: clamp(calc(50% - 160px), 8vw, 137px);
+            display: flex;
+            align-items: center;
+            gap: 4px; /* Разрыв между иконкой и текстом */
+            transition: top 0.5s ease-in-out; /* Плавный переход для смещения контейнера времени */
+            z-index: 2;
+        }
+
+        .time-icon {
+            width: 16px;
+            height: 16px;
+            z-index: 2;
+        }
+
+        .time-text {
+
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 16px;
+            color: #FFFFFF; /* Белый цвет текста */
+            z-index: 2;
+        }
+
+        .new-title {
+            position: absolute;
+            top: 32px; /* Положение ниже остальных элементов */
+            left: calc(50% - 141px);
+            width: 283px;
+            height: 27px;
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            line-height: 27.32px;
+            color: #FFFFFF; /* Белый текст */
+            opacity: 0; /* Скрыто изначально */
+            transition: opacity 0.5s ease-in-out; /* Плавный переход для появления */
+            z-index: 1;
+        }
+        .question-title {
+    font-family: 'Vela Sans GX', sans-serif;
+    font-weight: 600; /* Толщина шрифта */
+    font-size: 16px; /* Размер шрифта */
+    line-height: 21.86px; /* Высота строки */
+    letter-spacing: 0%; /* Межбуквенный интервал */
+    color: #FFFFFF; /* Цвет текста (если нужен белый) */
+}
+
+
+
+
+        .choices-container {
+            padding: 0; /* Убираем отступы */
+            margin: 0 auto; /* Центрируем контейнер */
+            position: absolute;
+            justify-content: center;
+            align-items: center;
+            top: 300px;
+            padding-bottom: 100px;
+            width: 100%;
+            margin-left:16px;
+            margin-right: 16px;
+            max-width: 358px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 1;
+        }
+
+        .choice-button {
+            width: 100%;
+            position: relative;
+            background-color: #1C1C1C;
+            color: #FFFFFF;
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            text-align: left;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        .submit-button {
+    max-width: 358px;
+    background-color: #141414;
+    color: #FFFFFF;
+    font-family: 'Vela Sans GX', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 24px;
+    width: 100%;
+    height: 63px;
+    line-height: 21.86px;
+    transition: all 0.3s ease; /* Плавный переход */
+    z-index: 1;
+}
+
+.submit-button.inactive {
+    width: 100%;
+    height: 63px;
+    top: 94px;
+    left: 16px;
+    border-radius: 16px;
+    background-color: #0C0C0C;
+    font-family: 'Vela Sans GX', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 21.86px;
+    color: #7F7F7F;
+    cursor: default; /* Меняем курсор для неактивного состояния */
+}
+
+.choice-box-img
+{
+     width: 28px;
+     height: 28px;
+     z-index: 3;
+}
+

@@ -19,17 +19,28 @@
             Take our test!
         </div>
         {% if quiz %}
-        <a href="{% url 'quiz:quiz_view' quiz.id %}">
+        {% if user.telegram_id %}
+            <a href="{% url 'quiz:quiz_view' user.telegram_id %}">
+            {% else %}
+            <a href="{% url 'quiz:quiz_view' 1 %}">
+            {% endif %}
+
             <img src="{{ quiz.banner.url }}" alt="{{ quiz.title }}" class="quiz-banner">
 
             <div class="quiz-time-container">
                 <img src="{% static 'main_page/images/vector.png' %}" alt="Timer Icon" class="quiz-time-icon">
                 <div class="quiz-time-text">
-                    {{ quiz.duration_in_minutes }} минут
+                    {% if quiz.duration_in_minutes == 1 %}
+                        {{ quiz.duration_in_minutes }} минута
+                    {% elif quiz.duration_in_minutes < 5 %}
+                        {{ quiz.duration_in_minutes }} минуты
+                    {% else %}
+                        {{ quiz.duration_in_minutes }} минут
+                    {% endif %}
                 </div>
             </div>
             <div class="quiz-title">
-                {{ quiz.title }}
+                Theme: {{ quiz.title }}
             </div>
         </a>
         {% endif %}

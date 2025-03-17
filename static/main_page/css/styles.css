@@ -1,0 +1,211 @@
+
+        .subtitle {
+            position: absolute;
+            top:15vh;
+            max-width: 306px;
+            height: 66px;
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 700;
+            font-size: clamp(22px, 6vw, 24px);
+            line-height: 32.78px;
+            letter-spacing: -0.02em; /* -2% */
+            color: #FFFFFF;
+            z-index: 2;
+        }
+
+        html, body {
+         overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+    position:absolute;
+    left:0;
+    top:0;
+    background-color: #0B0B0B;
+    height: 100%;
+    width:100%;
+    max-height:calc(100vh + 100px);
+}
+
+.container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.layered-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 100px); /* Фиксированная высота, не увеличивается */
+    min-height: 100%; /* Минимальная высота равна контейнеру */
+    object-fit: cover; /* Покрывает контейнер без искажений */
+    z-index: 0;
+}
+
+
+        .logo {
+            position: absolute;
+            top: 36px;
+            left: 16px;
+            max-width: 78px;
+            height: 16px;
+        }
+        .description {
+        position:absolute;
+        top: calc(15vh + 90px);
+            max-width: 288px;
+            height: 60px;
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 500;
+            font-size: 12px;
+            line-height: 20.4px;
+            color: #FFFFFFE5; /* Полупрозрачный белый */
+        }
+        .bottom-block {
+    position: absolute;
+    z-index: 2;
+    padding-left: 16px;
+    padding-right:16px;
+    max-width: 358px;
+    height: 270px;
+    bottom:0;
+    background-color: #0B0B0B;
+    border-radius: 16px;
+    overflow: hidden; /* Полностью отключаем прокрутку */
+    display: flex;
+    flex-direction: column; /* Располагаем элементы вертикально */
+    align-items: center; /* Центрируем горизонтально */
+}
+
+.bottom-block-text {
+    white-space: nowrap;
+    max-width: 232px;
+    height: 33px;
+    font-family: 'Vela Sans GX', sans-serif;
+    font-weight: 700;
+    font-size: clamp(20px, 4vw, 24px);
+
+    line-height: 32.78px;
+    letter-spacing: -0.02em; /* -2% */
+    color: #FFFFFF;
+    text-align: left;
+    margin-top: 16px; /* Добавляем отступ вниз */
+}
+
+.quiz-banner {
+    width: 100%; /* Картинка будет занимать всю ширину экрана */
+    max-width: 358px;
+    height: auto; /* Высота будет сохраняться пропорционально */
+    max-height: 192px; /* Максимальная высота 192px */
+    border-radius: 16px;
+    object-fit: cover; /* Чтобы изображение корректно масштабировалось */
+    transition: transform 0.5s ease-in-out; /* Плавный переход для изменения масштаба */
+    z-index: 1;
+    margin-left: auto;
+    margin-right: auto; /* Центрируем картинку */
+}
+
+.quiz-title {
+    color: inherit; /* Наследуем цвет от родителя */
+    cursor: default;
+    position: relative;
+    top: -40px;
+    max-width: 283px;
+    height: 27px;
+    font-family: 'Vela Sans GX', sans-serif;
+    font-weight: 700;
+    font-size: clamp(16px, 6vw, 20px);
+    line-height: 27.32px;
+    color: #FFFFFF; /* Белый текст */
+    overflow: hidden; /* На случай, если текст слишком длинный */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 8px;
+    margin-left: 16px;
+}
+
+.quiz-time-container {
+    position: absolute;
+    top: 65px;
+    left: 30px;
+    display: flex; /* Располагаем элементы в строку */
+    align-items: center; /* Выравниваем по вертикали */
+    gap: 4px; /* Разрыв между элементами */
+}
+
+
+.quiz-time-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.quiz-time-text {
+    font-family: 'Vela Sans GX', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    color: #FFFFFF; /* Белый цвет текста */
+}
+
+        .footer {
+        position:absolute;
+        bottom: -100px;
+    max-width: 390px;
+    width: 100%;
+    height: 100px; /* Фиксированная высота */
+    background-color: #141414; /* Цвет фона */
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    font-family: 'Vela Sans GX', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+    z-index: 2;
+     display: flex;
+     flex-direction: column;
+}
+        .footer-title {
+            top: 12px;
+            max-width: 257px;
+            height: 22px;
+            font-family: 'Vela Sans GX', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 21.86px;
+            color: #FFFFFF;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
+        .footer-block {
+    top: 70px;
+    max-width: 343px;
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+.footer-block a {
+    display: flex;
+    align-items: center;
+}
+
+.footer-block img {
+    height: 100%; /* Позволяет картинкам уменьшаться вместе с контейнером */
+    max-height: 40px; /* Ограничиваем максимальную высоту */
+    width: auto; /* Сохраняем пропорции */
+    max-width: 100%; /* Позволяет картинкам уменьшаться */
+}
+
+

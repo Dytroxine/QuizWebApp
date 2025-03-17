@@ -1,5 +1,5 @@
 from django.contrib import admin
-from quiz.models import Quiz, Question, Choice
+from quiz.models import Quiz, Question, Choice, Answer, User, LoadingText, Promocodes
 from .forms import QuizForm
 from django.db import models
 from django.http import HttpResponse
@@ -38,21 +38,35 @@ class QuizAdmin(admin.ModelAdmin):
             # Отправка WebSocket сообщения
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
-                f"quiz_{quiz_id}",
+                f"quiz",
                 {
-                    "type": "start_quiz",  # Это связано с `start_quiz` в `QuizConsumer`
-                    "quiz_id": quiz_id,
+                    "type": "start_quiz",
                 }
             )
 
             self.message_user(request, f"Квиз '{quiz.title}' успешно активирован.")
         else:
             self.message_user(request, f"Квиз '{quiz.title}' уже активирован.", level='warning')
-        return redirect(f'/admin/quiz/quiz/{quiz_id}/change/')
+        return redirect(f'/admin/quiz/quiz/')
 
 
 
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('telegram_id', 'quiz_score')  # Отображение ID и баллов
 
+    def quiz_score(self, obj):
+        return obj.get_quiz_score()
+
+    quiz_score.short_description = 'Баллы за квиз'  # Название колонки в админке
+
+@admin.register(Promocodes)
+class PromocodeAdmin(admin.ModelAdmin):
+    list_display = ('promocode', 'is_given', 'user')  # Отображение в списке
+
+@admin.register(LoadingText)
+class LoadingAdmin(admin.ModelAdmin):
+    list_display = ('text',)  # Отображение в списке
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
@@ -68,3 +82,24 @@ class ChoiceAdmin(admin.ModelAdmin):
     search_fields = ('text',)  # Поиск по тексту ответа
     ordering = ('question', 'text')  # Сортировка по вопросу и тексту ответа
 
+
+@admin.register(Answer)
+class AnswerAdmin(admin.ModelAdmin):
+    list_display = ('user', 'answer_display', 'is_correct')  # Отображение в списке
+
+    def answer_display(self, obj):
+        """Показывает либо выбор (choice), либо текстовый ответ (text_answer)"""
+        return obj.choice.text if obj.choice else obj.text_answer
+
+    answer_display.short_description = 'Ответ'  # Название колонки
+
+    def is_correct(self, obj):
+        """Проверяет, правильный ли ответ"""
+        if obj.question.question_type != 'text_input':
+            return obj.choice.is_correct
+        else:
+            return obj.text_answer == obj.question.correct_answer
+
+    is_correct.boolean = True  # Отображение как иконка (True/False)
+    is_correct.admin_order_field = 'choice__is_correct'  # Сортировка по полю
+    is_correct.short_description = 'Правильный ответ'  # Название колонки

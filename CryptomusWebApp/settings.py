@@ -7,7 +7,7 @@ SECRET_KEY = 'django-insecure-g=7t+h!5mxaum_+2hw=7!637z6_$sq#a&9!6c$orutju=tj48#
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['89.169.53.234', '5ae1-2a12-5940-9f13-00-2.ngrok-free.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['89.169.53.234', '5ae1-2a12-5940-9f13-00-2.ngrok-free.app', 'localhost', '127.0.0.1', '[::1]', '.ngrok-free.app']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -24,6 +24,9 @@ INSTALLED_APPS = [
     'analytics',
     'accounts',
     'channels',
+]
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.ngrok-free.app'  # Разрешение всех поддоменов Ngrok
 ]
 
 MIDDLEWARE = [
@@ -104,8 +107,6 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
-
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
