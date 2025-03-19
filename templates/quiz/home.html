@@ -250,33 +250,48 @@ showIntermediateScreen(userPlace, promocode);
 }
 }
 function showIntermediateScreen(userPlace, promocode) {
+
+    const topBlock = document.querySelector('.top-block');
+
     timerText.textContent = '';
     choicesContainer.innerHTML = '';
 
 
     const mainContainer = document.querySelector('.container');
-    const topBlock = document.querySelector('.top-block');
     const bgImage = document.createElement('img');
 
     bgImage.src = "{% static 'quiz/images/BG.png' %}"; // Путь к картинке
-    bgImage.style.zIndex = 0;
     bgImage.classList.add('layered-image'); // Добавляем класс для стилизации
+    bgImage.style.minHeight = '1024px';
+
 
     // Добавляем изображение в контейнер
-    document.body.appendChild(bgImage);
+    mainContainer.appendChild(bgImage);
+
+    const logoContainer = document.createElement('div');
+    logoContainer.className = 'logo-container';
+
+    const logoImage = document.createElement('img');
+    logoImage.src = '/static/quiz/images/Logotype.png';
+    logoImage.alt = 'Logo';
+
+    logoContainer.appendChild(logoImage);
+    mainContainer.appendChild(logoContainer);
 
     // Скрываем ненужные элементы
     document.querySelector('.banner')?.classList.add('hidden');
     document.querySelector('.title')?.classList.add('hidden');
     document.querySelector('.new-title')?.classList.add('hidden');
-    document.querySelector('.logo')?.classList.add('hidden');
+
+
 
     // Делаем футер прозрачным вместо удаления
     const footer = document.querySelector('.footer');
     if (footer) {
-        footer.style.opacity = '0';
+        footer.style.display = 'none';
         footer.style.transition = 'opacity 0.5s ease-in-out';
     }
+
 
     // Скрываем все элементы в `top-block`
     Array.from(topBlock.children).forEach(child => {
@@ -297,15 +312,7 @@ function showIntermediateScreen(userPlace, promocode) {
     resultText.textContent = 'Your result:';
     resultText.className = 'result-text';
 
-    const logoContainer = document.createElement('div');
-    logoContainer.className = 'logo-container';
 
-    const logoImage = document.createElement('img');
-    logoImage.src = '/static/quiz/images/Logotype.png';
-    logoImage.alt = 'Logo';
-
-    logoContainer.appendChild(logoImage);
-    topBlock.appendChild(logoContainer);
 
     const placeContainer = document.createElement('div');
     placeContainer.className = 'place-container'; // Контейнер для места
@@ -326,6 +333,7 @@ function showIntermediateScreen(userPlace, promocode) {
 
     // Второй блок (Награда)
     if (promocode) {
+
         const rewardContainer = document.createElement('div');
         rewardContainer.className = 'reward-container';
 
@@ -393,7 +401,7 @@ const homeButton = document.createElement('button');
 homeButton.textContent = 'Home';
 homeButton.className = 'home-button';
 homeButton.addEventListener('click', () => {
-    window.location.href = '/{telegramId}'; // Измени URL, если главная страница отличается
+    window.location.href = '/'; // Измени URL, если главная страница отличается
 });
 
 // Добавляем кнопки в контейнер
@@ -420,15 +428,16 @@ container.appendChild(buttonContainer);
     // Скрываем логотип и контейнер
 
     const topBlock = document.querySelector('.top-block');
+    document.querySelector('.layered-image').style.display = "none";
     document.querySelector('.top-block').style.background = "none";
 
     // Показываем скрытые старые элементы
     document.querySelector('.banner')?.classList.remove('hidden');
     document.querySelector('.title')?.classList.remove('hidden');
     document.querySelector('.new-title')?.classList.remove('hidden');
-    document.querySelector('.logo-container')?.classList.add('hidden');
     document.querySelector('.time-container')?.classList.add('hidden');
-    document.querySelectorAll('.banner, .title, .new-title, .footer, .footer-block, .logo-container, .intermediate-container')
+    document.querySelector('.logo-container')?.classList.add('hidden');
+    document.querySelectorAll('.banner, .title, .new-title, .footer, .footer-block, .intermediate-container')
         .forEach(element => {
             const currentZIndex = parseInt(window.getComputedStyle(element).zIndex) || 0;
             element.style.zIndex = currentZIndex + 1;
@@ -551,6 +560,22 @@ container.appendChild(buttonContainer);
         separator.style.margin = '16px 0';
         choicesContainer.appendChild(separator);
     });
+    const buttonContainer = document.createElement('div');
+            buttonContainer.className = 'button-container';
+
+            // Создаем кнопку "Home"
+            const homeButton = document.createElement('button');
+            homeButton.textContent = 'Home';
+            homeButton.className = 'home-button';
+            homeButton.addEventListener('click', () => {
+                window.location.href = '/'; // Измени URL, если главная страница отличается
+            });
+
+        // Добавляем кнопки в контейнер
+        buttonContainer.appendChild(homeButton);
+
+
+        choicesContainer.appendChild(buttonContainer);
 }
 
 
@@ -625,6 +650,7 @@ container.appendChild(buttonContainer);
                     }
                     if (quizBanner) quizBanner.style.top = '82px';
                     if (quizTitle) quizTitle.style.top = '223px';
+
                     if (timeContainer) timeContainer.style.top = '106px';
 
                     if (newQuizTitle) {

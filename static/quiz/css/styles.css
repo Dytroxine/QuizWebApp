@@ -16,6 +16,18 @@
     border-radius: 8px;
 }
 
+.layered-image-2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Ширина картинки 100% от экрана */
+    height: calc(100vh + 200px); /* Высота картинки: 100% экрана + 100px */
+    min-height: 1024px;
+    object-fit: cover; /* Масштабируем изображение, чтобы оно полностью покрывало контейнер */
+    z-index: 0; /* Фиксируем на заднем плане */
+}
+
+
 .copy-button {
     width: 36.25px;
     height: 37px;
@@ -269,9 +281,8 @@
 }
 
     .banner {
-    width: calc(100% - 32px); /* Картинка будет занимать всю ширину экрана */
+    width: calc(100% - 16px); /* Картинка будет занимать всю ширину экрана */
     max-width: 358px; /* Но не будет превышать 358px по ширине */
-    height: auto; /* Высота будет сохраняться пропорционально */
     max-height: 192px; /* Максимальная высота 192px */
     border-radius: 16px;
     object-fit: cover; /* Чтобы изображение корректно масштабировалось */
@@ -281,6 +292,8 @@
     margin-right: auto; /* Центрируем картинку */
     position: absolute;
     top: 16px;
+
+
 }
         .load-banner {
             position: absolute;
@@ -310,13 +323,12 @@
 
         .title {
             position: absolute;
-            top: clamp(80px, 15vw, 137px); /* Относительно верхней грани баннера */
-            left: calc(50% - 150px);
+            top: 137px;
             width: 283px;
             height: 27px;
             font-family: 'Vela Sans GX', sans-serif;
             font-weight: 700;
-            font-size: 20px;
+            font-size: clamp(16px, 6vw, 20px);
             line-height: 27.32px;
             color: #FFFFFF; /* Белый текст */
             overflow: hidden; /* На случай, если текст слишком длинный */
@@ -324,7 +336,12 @@
             white-space: nowrap;
             transition: top 0.5s ease-in-out; /* Плавный переход для смещения текста */
             z-index: 1;
+
+
         }
+
+
+
         .time-container {
             position: absolute;
             top: 40px; /* Расположение относительно баннера */
@@ -355,7 +372,6 @@
         .new-title {
             position: absolute;
             top: 32px; /* Положение ниже остальных элементов */
-            left: calc(50% - 141px);
             width: 283px;
             height: 27px;
             font-family: 'Vela Sans GX', sans-serif;
@@ -366,8 +382,10 @@
             opacity: 0; /* Скрыто изначально */
             transition: opacity 0.5s ease-in-out; /* Плавный переход для появления */
             z-index: 1;
+            text-align: center;
         }
         .question-title {
+        margin-left: 20px;
     font-family: 'Vela Sans GX', sans-serif;
     font-weight: 600; /* Толщина шрифта */
     font-size: 16px; /* Размер шрифта */
@@ -400,7 +418,7 @@
         }
 
         .choice-button {
-            width: 100%;
+            width: calc(100% - 64px);
             position: relative;
             background-color: #1C1C1C;
             color: #FFFFFF;
@@ -426,7 +444,7 @@
     border-radius: 8px;
     cursor: pointer;
     margin-top: 24px;
-    width: 100%;
+    width: calc(100% - 64px);
     height: 63px;
     line-height: 21.86px;
     transition: all 0.3s ease; /* Плавный переход */

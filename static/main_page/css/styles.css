@@ -14,26 +14,27 @@
         }
 
         html, body {
-         overflow-x: hidden;
-        margin: 0;
-        padding: 0;
-    position:absolute;
-    left:0;
-    top:0;
-    background-color: #0B0B0B;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Отключаем горизонтальный скролл */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    width:100%;
-    max-height:calc(100vh + 100px);
+    background-color: #0B0B0B;
+    min-height: 100%; /* Обеспечиваем, что body будет занимать минимум 100% */
 }
 
 .container {
     position: absolute;
-    height: 100%;
-    width: 100%;
+    height: 100%; /* Контейнер будет иметь высоту 100% */
+    width: 100%; /* Контейнер будет занимать всю ширину */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    z-index: 1; /* Контейнер будет выше картинки */
 }
 
 .layered-image {
@@ -49,6 +50,7 @@
 
 
         .logo {
+            z-index: 3;
             position: absolute;
             top: 36px;
             left: 16px;
@@ -111,7 +113,6 @@
 }
 
 .quiz-title {
-    color: inherit; /* Наследуем цвет от родителя */
     cursor: default;
     position: relative;
     top: -40px;
